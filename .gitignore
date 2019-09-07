@@ -1,0 +1,4 @@
+.stack-work/
+auth-provider.cabal
+*~
+.idea/
