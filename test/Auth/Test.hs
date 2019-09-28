@@ -17,8 +17,6 @@ import           Server.Config
 import           SQLite (createSchema, sqliteBackend, passwordAuthenticate)
 import           Test.Data
 
-
-
 testAuth :: Text -> IO (R.PathMap (Handler ()))
 testAuth issuer = do
     pool <- createPool (SQLite.open "file::memory:?cache=shared") SQLite.close 1 60 20

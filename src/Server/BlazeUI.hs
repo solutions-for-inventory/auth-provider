@@ -11,7 +11,7 @@ import           Data.Int (Int64)
 import           Data.Text (Text)
 import           Data.Time.Clock.POSIX
 
-import           Text.Blaze.Html5 as H
+import           Text.Blaze.Html5 as H hiding (main)
 import           Text.Blaze.Html5.Attributes as A hiding (scope)
 
 import Model (Scope, scopeName, Client (..))
