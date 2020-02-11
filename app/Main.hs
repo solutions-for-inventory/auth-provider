@@ -23,7 +23,6 @@ import qualified Web.Routing.Combinators as R
 import qualified Web.Routing.SafeRouting as R
 
 import qualified PostgreSQL as BP
-import qualified SQLite as BS
 import Server
 import Server.Config
 import Server.Internal
@@ -33,33 +32,23 @@ import Data.Yaml (decodeFile, FromJSON(..), ToJSON(..))
 import Data.Aeson.Casing
 import Data.Aeson (genericToJSON, genericParseJSON)
 
-data DatabaseProvider = POSTGRES | SQLITE deriving (Generic, Read, Show)
+data AppConfig = AppConfig { webappsDir :: FilePath
+                           , port :: Int
+                           , database :: DBConfig
+                           } deriving (Generic, Read, Show)
 
-data AppConfig = AppConfig {
-                          webappsDir :: FilePath
-                        , port :: Int
-                        , databaseProvider :: DatabaseProvider
-                        , postgres :: PostgresConfig
-                        , sqliteDataBase :: String
-} deriving (Generic, Read, Show)
-
-data PostgresConfig = PostgresConfig {
-                            user :: String
-                          , password :: String
-                          , host :: String
-                          , port :: Int
-                          , database :: String
-} deriving (Generic, Read, Show)
+data DBConfig = DBConfig {  user :: String
+                         , password :: String
+                         , host :: String
+                         , port :: Int
+                         , database :: String
+                         } deriving (Generic, Read, Show)
 
 instance FromJSON AppConfig
-instance FromJSON PostgresConfig
-instance FromJSON DatabaseProvider
+instance FromJSON DBConfig
 
-getPostgresConfig :: AppConfig -> PostgresConfig
-getPostgresConfig AppConfig {..} = postgres
-
-getPostgresConnexionString :: PostgresConfig -> String
-getPostgresConnexionString PostgresConfig {..} = concat ["postgres://", user,":", password, "@", host,":", show port, "/", database]
+getPostgresConnexionString :: DBConfig -> String
+getPostgresConnexionString DBConfig {..} = concat ["postgres://", user, ":", password, "@", host, ":", show port, "/", database]
 
 main :: IO ()
 main = do
@@ -84,15 +73,9 @@ runWithOptions AppConfig {..} sidSalt = do
     sessionKey <- defaultKey
     kr <- defaultKeyRing
     rotateKeys kr True
-    (mkBackEnd, passwordAuthenticate) <- case databaseProvider of
-        POSTGRES -> do
-            pool <- createPool (connectPostgreSQL (BC.pack $ getPostgresConnexionString postgres)) close 1 60 20
-            return (BP.postgreSQLBackend pool, BP.passwordAuthenticate pool)
-        SQLITE   -> do
-            pool <- createPool (SQLite.open sqliteDataBase) SQLite.close 1 60 20
-            withResource pool $ \c -> BS.createSchema c
-            return (BS.sqliteBackend pool, \v u p -> withResource pool $ \c -> BS.passwordAuthenticate c v u p)
-
+    (mkBackEnd, passwordAuthenticate) <- do
+                                          pool <- createPool (connectPostgreSQL (BC.pack $ getPostgresConnexionString database)) close 1 60 20
+                                          return (BP.postgreSQLBackend pool, BP.passwordAuthenticate pool)
     config <- mkBackEnd <$> inMemoryConfig "" kr sidSalt
     let app = staticApp (defaultWebAppSettings "webroot")
         baseRouter = authServer config defaultApprovalPage authenticatedSubject authenticateSubject

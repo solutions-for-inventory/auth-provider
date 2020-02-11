@@ -3,13 +3,11 @@ webappsDir:     webroot
 port:           4200
 
 #persistence configs
-databaseProvider: POSTGRES # POSTGRES | SQLITE
-dbPoolsize: 10
-postgres:
-  user:     inventory_user
-  password: inventory_password
-  host:     192.168.0.100
-  port:     5432
-  database: inventory_db
 
-sqliteDataBase: inventory_db.db3
+database:
+  user:     "inventory_user"
+  password: "inventory_password"
+  host:     "192.168.0.100"
+  port:     5432
+  database: "inventory_db"
+  poolsize: 10
