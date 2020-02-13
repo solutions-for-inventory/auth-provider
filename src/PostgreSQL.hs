@@ -219,7 +219,35 @@ loadClient pool cid = withResource pool $ \conn -> do
 loadUserInfo :: Pool Connection -> LoadUserInfo IO
 loadUserInfo pool uid _ = withResource pool $ \conn -> do
     us <- query conn [sql|
-        SELECT * FROM user_info WHERE id=? |] [uid]
+    SELECT
+          concat(user_id, '') -- id
+        , '' -- name
+        , '' -- given_name
+        , '' -- family_name
+        , '' -- middle_name
+        , '' -- nickname
+        , '' -- preferred_username
+        , '' -- profile
+        , '' -- picture
+        , '' -- website
+        , email
+        , false --email_verified
+        , '' -- gender
+        , current_date -- birthdate
+        , '' -- zoneinfo
+        , language --locale
+        , '' -- phone_number
+        , false -- phone_number_verified
+        , '' -- formatted
+        , '' -- street_address
+        , '' -- locality
+        , '' -- region
+        , '' -- postal_code
+        , '' -- country
+        , modified_date --updated_at
+    FROM t_user
+    WHERE user_id = ?
+        |] [uid]
     return $ case us of
         [u] -> Just u
         _   -> Nothing
@@ -227,8 +255,8 @@ loadUserInfo pool uid _ = withResource pool $ \conn -> do
 passwordAuthenticate :: Pool Connection -> (ByteString -> ByteString -> Bool) -> Text -> ByteString -> IO (Maybe SubjectId)
 passwordAuthenticate pool validatePwd username password = withResource pool $ \conn -> do
     us <- query conn [sql|
-        SELECT id, password
-        FROM op_user
+        SELECT concat(user_id, ''), password
+        FROM t_user
         WHERE username = ? |] [username]
     return $ case us of
        [(uid, encodedPwd)] -> if validatePwd password (encodeUtf8 encodedPwd)
