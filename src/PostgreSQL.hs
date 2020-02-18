@@ -244,7 +244,7 @@ loadUserInfo pool uid _ = withResource pool $ \conn -> do
         , '' -- region
         , '' -- postal_code
         , '' -- country
-        , modified_date --updated_at
+        , created_date --updated_at
     FROM t_user
     WHERE user_id = ?
         |] [uid]
