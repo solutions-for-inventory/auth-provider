@@ -231,7 +231,13 @@ sessionDelete k = do
         Just s  -> put rs { resSession = Just $ S.delete s k }
 
 invalidateSession :: Handler ()
-invalidateSession = modify $ \rs -> rs { resSession = Nothing }
+invalidateSession = do
+                     () <- modify $ \rs -> rs { resSession = Nothing }
+                     callbackUrl <- maybeQueryParam "callbackUrl"
+                     () <- case callbackUrl of
+                            Just url -> redirectExternal $ TE.encodeUtf8 url
+                            Nothing  -> return ()
+                     return ()
 
 methodNotAllowed :: Handler a
 methodNotAllowed = status methodNotAllowed405 >> complete
