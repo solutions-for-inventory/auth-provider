@@ -31,6 +31,12 @@ Run
 -------------------
     $ stack exec auth-provider
 
+Run Docker container
+
+docker tag auth-provider docker.pkg.github.com/solutions-for-inventory/auth-provider/auth-provider:1.0
+docker push docker.pkg.github.com/solutions-for-inventory/auth-provider/auth-provider:1.0
+docker run -it --rm  --env DB_HOST=192.168.99.100 auth-provider
+
 Test Example
 -------------------
 
