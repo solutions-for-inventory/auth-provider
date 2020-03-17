@@ -20,6 +20,7 @@ Do stack setup only the first time
 Build the project
 
     $ stack build
+    $ stack build --copy-bins --local-bin-path target
 
 Config DB provider
 -------------------
@@ -35,3 +36,9 @@ Test Example
 
     http://localhost:3000/oauth/authorize?client_id=app&state=state_code&response_type=code&redirect_uri=http%3A%2F%2Flocalhost:8080/app
 
+
+
+###Build docker image
+```
+$ docker build -t auth-provider ./ 
+```
