@@ -1,13 +1,13 @@
 #webapps configs
-webappsDir:     webroot
-port:           4200
+webappsDir:     "_env:APP_WEBAPPS_DIR:webroot"
+port:           "_env:APP_PORT:4200"
 
 #persistence configs
 
 database:
-  user:     "inventory_user"
-  password: "inventory_password"
-  host:     "192.168.0.100"
-  port:     5432
-  database: "inventory_db"
-  poolsize: 10
+  user:     "_env:DB_USER:inventory_user"
+  password: "_env:DB_PASSWORD:inventory_password"
+  host:     "_env:DB_HOST:192.168.0.100"
+  port:     "_env:DB_PORT:5432"
+  database: "_env:DB_DATABASE:inventory_db"
+  poolsize: "_env:DB_POOL_SIZE:10"

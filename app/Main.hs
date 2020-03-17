@@ -29,6 +29,7 @@ import Server.Internal
 import Server.Session (defaultKey, defaultLoadSession)
 import GHC.Generics
 import Data.Yaml (decodeFile, FromJSON(..), ToJSON(..))
+import Data.Yaml.Config
 import Data.Aeson.Casing
 import Data.Aeson (genericToJSON, genericParseJSON)
 
@@ -52,9 +53,10 @@ getPostgresConnexionString DBConfig {..} = concat ["postgres://", user, ":", pas
 
 main :: IO ()
 main = do
-    maybeAppConfigs <- decodeFile "config/settings.yml" :: IO (Maybe AppConfig)
-    let Just appConfigs = maybeAppConfigs
-    -- putStrLn (show appConfigs)
+--    maybeAppConfigs <- decodeFile "config/settings.yml" :: IO (Maybe AppConfig)
+    appConfigs <- loadYamlSettings ["config/settings.yml"] [] useEnv :: IO AppConfig
+--    let Just appConfigs = maybeAppConfigs
+    putStrLn (show appConfigs)
     env <- getEnvironment
     sidSalt <- decodeSalt $ lookup "SUBJECT_ID_SALT" env
     when (isNothing sidSalt) $ putStrLn "Subject identifiers will be shared between clients. Set SUBJECT_ID_SALT to use pairwise identifiers)"
