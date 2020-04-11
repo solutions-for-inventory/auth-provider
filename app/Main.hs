@@ -12,7 +12,7 @@ import Data.Monoid ((<>))
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import Database.PostgreSQL.Simple
-import qualified Database.SQLite.Simple as SQLite
+--import qualified Database.SQLite.Simple as SQLite
 import Network.Wai.Application.Static (staticApp, defaultWebAppSettings)
 import Network.Wai.Middleware.RequestLogger (logStdoutDev)
 import Network.Wai.Handler.Warp (run)
