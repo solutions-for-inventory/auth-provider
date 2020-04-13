@@ -1,9 +1,9 @@
-## Auth provider
+## Oauth2 provider for inventories solutions
 
 A Haskell implementation of [OpenID Connect](http://openid.net/connect/).
 
 ##### Prerequisites
-Instasll Haskell [stack](https://docs.haskellstack.org/en/stable/README/#how-to-install)
+Install Haskell [stack](https://docs.haskellstack.org/en/stable/README/#how-to-install)
 
 ##### Building
 ```
@@ -14,7 +14,7 @@ Do stack setup only the first time
 ```
 $ stack setup
 ```
-Build the project
+Build project
 ```
 $ stack build
 ```

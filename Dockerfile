@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM ubuntu:19.10
 RUN mkdir -p /opt/auth-provider/
 # ARG BINARY_PATH
 WORKDIR /opt/auth-provider
