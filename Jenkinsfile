@@ -1,11 +1,13 @@
 pipeline {
     agent any
-
+    environment {
+        PATH = "/usr/local/bin:$PATH"
+    }
     stages {
         stage('CleanOldBinary') {
             steps {
                catchError {
-                 sh 'rm -rf webapps/dist'
+//                 sh 'rm -rf webapps/dist'
                  sh 'rm -rf .stack-work'
                  sh 'docker stop auth-provider'
                  sh 'docker rm auth-provider'
