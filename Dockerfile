@@ -2,7 +2,7 @@ FROM centos:latest
 RUN mkdir -p /opt/auth-provider/
 # ARG BINARY_PATH
 WORKDIR /opt/auth-provider
-RUN dnf update && def install -y \
+RUN dnf update && dnf install -y \
   ca-certificates \
   postgresql-devel
 COPY target /opt/auth-provider
