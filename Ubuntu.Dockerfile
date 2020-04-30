@@ -1,10 +1,10 @@
-FROM centos:latest
+FROM ubuntu:19.10
 RUN mkdir -p /opt/auth-provider/
 # ARG BINARY_PATH
 WORKDIR /opt/auth-provider
-RUN dnf update && def install -y \
+RUN apt-get update && apt-get install -y \
   ca-certificates \
-  postgresql-devel
+  libpq-dev
 COPY target /opt/auth-provider
 COPY config /opt/auth-provider/config
 COPY webroot /opt/auth-provider/webroot
