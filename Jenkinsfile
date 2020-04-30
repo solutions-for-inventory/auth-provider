@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo 'Starting to build docker image'
                 script {
-                    def customImage = docker.build("auth-provider:1.0")
+                    def customImage = docker.build("auth-provider:1.0 --network=host")
                 }
             }
         }
