@@ -235,7 +235,7 @@ loadUserInfo pool uid _ = withResource pool $ \conn -> do
         , '' -- gender
         , current_date -- birthdate
         , '' -- zoneinfo
-        , language --locale
+        , locale --locale
         , '' -- phone_number
         , false -- phone_number_verified
         , '' -- formatted
